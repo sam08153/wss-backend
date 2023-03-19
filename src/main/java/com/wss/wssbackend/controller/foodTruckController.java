@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class foodTruckController {
@@ -57,6 +57,17 @@ public class foodTruckController {
 
             orderFood of = orderFoodReposiory.save(orderFood);
             return new ResponseEntity<>(of, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/orderFood/{employeeId}")
+    public ResponseEntity<List<orderFood>> getAllOrder(@PathVariable final String employeeId) {
+        try {
+            List<orderFood> Orders = new ArrayList<orderFood>();
+            orderFoodReposiory.findByEmployeeId(employeeId).forEach(Orders::add);
+            return new ResponseEntity<>(Orders, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
